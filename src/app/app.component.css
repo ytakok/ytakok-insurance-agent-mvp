@@ -328,19 +328,37 @@
 @media (min-width: 640px) and (max-width: 768px) {
   .sidebar {
     width: 70px;
+    position: fixed;
+    left: 0;
+    transform: none;
   }
   .sidebar .logo-text,
   .sidebar .nav-label,
   .sidebar .user-details {
     display: none;
   }
+  .sidebar .collapse-btn {
+    display: none;
+  }
+  .sidebar .nav-badge {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    padding: 2px 4px;
+    font-size: 9px;
+    min-width: 14px;
+  }
+  .app-container[dir="rtl"] .sidebar {
+    left: auto;
+    right: 0;
+  }
   .main-content {
-    margin-left: 70px;
-    margin-right: 0;
+    margin-left: 70px !important;
+    margin-right: 0 !important;
   }
   .app-container[dir="rtl"] .main-content {
-    margin-left: 0;
-    margin-right: 70px;
+    margin-left: 0 !important;
+    margin-right: 70px !important;
   }
   .quick-stats {
     display: none;

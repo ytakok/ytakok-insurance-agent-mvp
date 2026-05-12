@@ -395,26 +395,47 @@
   }
 }
 
-// Tablet
+// Tablet (640px - 768px) - Sidebar collapsed with icons visible
 @media (min-width: 640px) and (max-width: @breakpoint-md) {
   .sidebar {
     width: @sidebar-collapsed-width;
+    position: fixed;
+    left: 0;
+    transform: none;
 
     .logo-text,
     .nav-label,
     .user-details {
       display: none;
     }
+
+    .collapse-btn {
+      display: none;
+    }
+
+    .nav-badge {
+      position: absolute;
+      top: 4px;
+      right: 4px;
+      padding: 2px 4px;
+      font-size: 9px;
+      min-width: 14px;
+    }
+  }
+
+  .app-container[dir="rtl"] .sidebar {
+    left: auto;
+    right: 0;
   }
 
   .main-content {
-    margin-left: @sidebar-collapsed-width;
-    margin-right: 0;
+    margin-left: @sidebar-collapsed-width !important;
+    margin-right: 0 !important;
   }
 
   .app-container[dir="rtl"] .main-content {
-    margin-left: 0;
-    margin-right: @sidebar-collapsed-width;
+    margin-left: 0 !important;
+    margin-right: @sidebar-collapsed-width !important;
   }
 
   .quick-stats {
