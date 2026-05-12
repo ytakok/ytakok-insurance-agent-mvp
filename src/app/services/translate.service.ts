@@ -43,7 +43,7 @@ export class TranslateService {
 
     try {
       const translations = await firstValueFrom(
-        this.http.get<TranslationData>(`/assets/i18n/${locale}.json`),
+        this.http.get<TranslationData>(`assets/i18n/${locale}.json`),
       );
       this._translations.set(translations);
       this._isLoaded.set(true);
