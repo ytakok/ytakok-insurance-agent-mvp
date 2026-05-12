@@ -307,6 +307,9 @@
 @media (max-width: 639px) {
   .sidebar {
     width: @sidebar-collapsed-width;
+    position: fixed;
+    left: 0;
+    right: auto;
 
     // Always collapsed on mobile - hide text elements
     .logo-text,
@@ -346,19 +349,35 @@
     }
   }
 
-  .app-container[dir="rtl"] .sidebar {
-    left: auto;
-    right: 0;
+  // RTL: Sidebar on right side
+  .app-container[dir="rtl"] {
+    .sidebar {
+      left: auto;
+      right: 0;
+    }
+
+    .main-content {
+      margin-left: 0 !important;
+      margin-right: @sidebar-collapsed-width !important;
+    }
+  }
+
+  // LTR: Sidebar on left side
+  .app-container[dir="ltr"] {
+    .sidebar {
+      left: 0;
+      right: auto;
+    }
+
+    .main-content {
+      margin-left: @sidebar-collapsed-width !important;
+      margin-right: 0 !important;
+    }
   }
 
   .main-content {
-    margin-left: @sidebar-collapsed-width !important;
-    margin-right: 0 !important;
-  }
-
-  .app-container[dir="rtl"] .main-content {
-    margin-left: 0 !important;
-    margin-right: @sidebar-collapsed-width !important;
+    margin-left: @sidebar-collapsed-width;
+    margin-right: 0;
   }
 
   .top-header {
@@ -401,6 +420,7 @@
     width: @sidebar-collapsed-width;
     position: fixed;
     left: 0;
+    right: auto;
     transform: none;
 
     .logo-text,
@@ -423,19 +443,30 @@
     }
   }
 
-  .app-container[dir="rtl"] .sidebar {
-    left: auto;
-    right: 0;
+  // RTL: Sidebar on right side
+  .app-container[dir="rtl"] {
+    .sidebar {
+      left: auto;
+      right: 0;
+    }
+
+    .main-content {
+      margin-left: 0 !important;
+      margin-right: @sidebar-collapsed-width !important;
+    }
   }
 
-  .main-content {
-    margin-left: @sidebar-collapsed-width !important;
-    margin-right: 0 !important;
-  }
+  // LTR: Sidebar on left side
+  .app-container[dir="ltr"] {
+    .sidebar {
+      left: 0;
+      right: auto;
+    }
 
-  .app-container[dir="rtl"] .main-content {
-    margin-left: 0 !important;
-    margin-right: @sidebar-collapsed-width !important;
+    .main-content {
+      margin-left: @sidebar-collapsed-width !important;
+      margin-right: 0 !important;
+    }
   }
 
   .quick-stats {
