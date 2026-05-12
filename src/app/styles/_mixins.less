@@ -1,0 +1,136 @@
+// Insurance Agent MVP - LESS Mixins
+@import "_variables";
+
+// Flexbox Mixins
+.flex-center() {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.flex-between() {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.flex-column() {
+  display: flex;
+  flex-direction: column;
+}
+
+// Button Mixins
+.btn-base() {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: @spacing-2;
+  padding: @spacing-2 @spacing-4;
+  border: none;
+  border-radius: @radius-lg;
+  font-size: @font-size-sm;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all @transition-fast;
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+}
+
+.btn-primary() {
+  .btn-base();
+  background: linear-gradient(135deg, @primary-600, @primary-700);
+  color: white;
+
+  &:hover:not(:disabled) {
+    background: linear-gradient(135deg, @primary-700, @primary-800);
+    transform: translateY(-1px);
+  }
+}
+
+.btn-secondary() {
+  .btn-base();
+  background: @neutral-100;
+  color: @neutral-700;
+  border: 1px solid @neutral-200;
+
+  &:hover:not(:disabled) {
+    background: @neutral-200;
+  }
+}
+
+// Card Mixin
+.card() {
+  background: white;
+  border-radius: @radius-xl;
+  box-shadow: @shadow-md;
+  padding: @spacing-6;
+}
+
+// Input Mixin
+.form-input() {
+  width: 100%;
+  padding: @spacing-3 @spacing-4;
+  border: 1px solid @neutral-200;
+  border-radius: @radius-lg;
+  font-size: @font-size-sm;
+  transition: all @transition-fast;
+
+  &:focus {
+    outline: none;
+    border-color: @primary-500;
+    box-shadow: 0 0 0 3px fade(@primary-500, 10%);
+  }
+}
+
+// Badge Mixin
+.badge(@bg: @primary-100, @color: @primary-700) {
+  display: inline-flex;
+  align-items: center;
+  padding: @spacing-1 @spacing-2;
+  border-radius: @radius-full;
+  font-size: @font-size-xs;
+  font-weight: 500;
+  background: @bg;
+  color: @color;
+}
+
+// Truncate Text
+.truncate() {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+// Modal Overlay
+.modal-overlay() {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  backdrop-filter: blur(4px);
+}
+
+// Responsive Mixins
+.responsive-sm(@rules) {
+  @media (max-width: @breakpoint-sm) {
+    @rules();
+  }
+}
+
+.responsive-md(@rules) {
+  @media (max-width: @breakpoint-md) {
+    @rules();
+  }
+}
+
+.responsive-lg(@rules) {
+  @media (max-width: @breakpoint-lg) {
+    @rules();
+  }
+}

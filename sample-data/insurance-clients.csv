@@ -1,0 +1,21 @@
+Name,Email,Phone,Address,City,State,Zip,Date of Birth,Policy Type,Policy Number,Premium,Deductible,Coverage,Start Date,End Date,Carrier
+John Smith,john.smith@email.com,(555) 123-4567,123 Oak Street,New York,NY,10001,1985-03-15,Auto,POL-2024-001,1200,500,100000,2024-01-15,2025-01-15,SafeGuard Insurance
+Sarah Johnson,sarah.j@email.com,(555) 234-5678,456 Maple Avenue,Los Angeles,CA,90001,1978-07-22,Home,POL-2024-002,2400,1000,350000,2024-02-01,2025-02-01,HomeProtect Inc
+Michael Williams,michael.w@email.com,(555) 345-6789,789 Pine Road,Chicago,IL,60601,1990-11-08,Auto,POL-2024-003,1800,750,75000,2024-03-20,2025-03-20,AutoShield Corp
+Emily Brown,emily.brown@email.com,(555) 456-7890,321 Elm Drive,Houston,TX,77001,1982-01-30,Life,POL-2024-004,3600,0,500000,2024-01-01,2044-01-01,LifeSecure Ltd
+David Garcia,david.g@email.com,(555) 567-8901,654 Cedar Lane,Phoenix,AZ,85001,1975-05-12,Business,POL-2024-005,4500,2500,1000000,2024-04-01,2025-04-01,BusinessPro Insurance
+Jessica Martinez,jessica.m@email.com,(555) 678-9012,987 Birch Court,Philadelphia,PA,19101,1988-09-25,Health,POL-2024-006,4800,1500,0,2024-01-01,2025-01-01,HealthFirst Insurance
+Robert Anderson,robert.a@email.com,(555) 789-0123,147 Walnut Street,San Antonio,TX,78201,1972-12-03,Auto,POL-2024-007,1400,500,125000,2024-05-15,2025-05-15,SafeGuard Insurance
+Jennifer Taylor,jennifer.t@email.com,(555) 890-1234,258 Spruce Avenue,San Diego,CA,92101,1995-04-18,Home,POL-2024-008,1800,750,275000,2024-06-01,2025-06-01,HomeProtect Inc
+Christopher Thomas,chris.t@email.com,(555) 901-2345,369 Ash Boulevard,Dallas,TX,75201,1980-08-07,Umbrella,POL-2024-009,2000,0,2000000,2024-02-15,2025-02-15,UmbrellaCover Ltd
+Amanda Jackson,amanda.j@email.com,(555) 012-3456,741 Willow Way,San Jose,CA,95101,1992-06-14,Auto,POL-2024-010,1600,500,100000,2024-07-01,2025-07-01,AutoShield Corp
+Daniel White,daniel.w@email.com,(555) 123-4568,852 Poplar Place,Austin,TX,78701,1983-02-28,Life,POL-2024-011,2400,0,300000,2024-03-01,2044-03-01,LifeSecure Ltd
+Michelle Harris,michelle.h@email.com,(555) 234-5679,963 Hickory Lane,Jacksonville,FL,32201,1977-10-11,Health,POL-2024-012,5200,2000,0,2024-01-01,2025-01-01,HealthFirst Insurance
+Kevin Martin,kevin.m@email.com,(555) 345-6780,159 Sycamore Drive,Fort Worth,TX,76101,1986-07-23,Business,POL-2024-013,6800,3000,1500000,2024-08-01,2025-08-01,BusinessPro Insurance
+Lisa Thompson,lisa.t@email.com,(555) 456-7891,267 Magnolia Court,Columbus,OH,43201,1991-01-05,Auto,POL-2024-014,1350,500,90000,2024-04-15,2025-04-15,SafeGuard Insurance
+Brian Robinson,brian.r@email.com,(555) 567-8902,378 Redwood Road,Charlotte,NC,28201,1974-11-19,Home,POL-2024-015,3200,1500,450000,2024-09-01,2025-09-01,HomeProtect Inc
+Nicole Clark,nicole.c@email.com,(555) 678-9013,489 Chestnut Street,Indianapolis,IN,46201,1989-05-30,Auto,POL-2024-016,1550,750,110000,2024-05-01,2025-05-01,AutoShield Corp
+Steven Lewis,steven.l@email.com,(555) 789-0124,591 Beech Avenue,San Francisco,CA,94101,1970-03-08,Umbrella,POL-2024-017,2500,0,3000000,2024-10-01,2025-10-01,UmbrellaCover Ltd
+Rachel Lee,rachel.l@email.com,(555) 890-1235,602 Palm Drive,Seattle,WA,98101,1994-08-22,Health,POL-2024-018,4200,1000,0,2024-01-01,2025-01-01,HealthFirst Insurance
+Jason Walker,jason.w@email.com,(555) 901-2346,713 Cypress Lane,Denver,CO,80201,1981-12-17,Life,POL-2024-019,4800,0,750000,2024-06-15,2044-06-15,LifeSecure Ltd
+Stephanie Hall,stephanie.h@email.com,(555) 012-3457,824 Laurel Court,Washington,DC,20001,1987-04-02,Business,POL-2024-020,8500,5000,2000000,2024-11-01,2025-11-01,BusinessPro Insurance

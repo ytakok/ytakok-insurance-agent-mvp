@@ -1,0 +1,327 @@
+<main class="tasks-page">
+  <!-- Header Actions -->
+  <section class="header-section">
+    <div class="header-left">
+      <div class="filter-tabs">
+        @for (tab of statusTabs(); track tab.value) {
+          <button
+            class="tab-btn"
+            [class.active]="selectedStatus() === tab.value"
+            (click)="selectedStatus.set(tab.value)"
+          >
+            {{ tab.label }}
+            <span class="tab-count">{{ getStatusCount(tab.value) }}</span>
+          </button>
+        }
+      </div>
+    </div>
+
+    <div class="header-right">
+      <button class="btn btn-primary" (click)="openNewTaskModal()">
+        ➕ {{ t("tasks.newTask") }}
+      </button>
+    </div>
+  </section>
+
+  <!-- Tasks List -->
+  <section class="tasks-container">
+    @for (task of filteredTasks(); track task.id) {
+      <article class="task-card" [class]="'status-' + task.status">
+        <div class="task-checkbox">
+          <input
+            type="checkbox"
+            [id]="'task-' + task.id"
+            [checked]="task.status === TaskStatus.Completed"
+            (change)="toggleTaskStatus(task)"
+            [attr.aria-label]="getToggleLabel(task)"
+          />
+        </div>
+
+        <div class="task-content" (click)="openTaskDetail(task)">
+          <div class="task-header">
+            <span
+              class="priority-indicator"
+              [class]="'priority-' + task.priority"
+            ></span>
+            <h3
+              class="task-title"
+              [class.completed]="task.status === TaskStatus.Completed"
+            >
+              {{ task.title }}
+            </h3>
+            @if (task.aiGenerated) {
+              <span class="ai-badge" [title]="t('tasks.aiGenerated')">🤖</span>
+            }
+          </div>
+
+          <p class="task-description">{{ task.description }}</p>
+
+          <div class="task-meta">
+            @if (task.clientName) {
+              <span class="meta-item client">
+                <span class="meta-icon">👤</span>
+                {{ task.clientName }}
+              </span>
+            }
+
+            <span class="meta-item due" [class.overdue]="isOverdue(task)">
+              <span class="meta-icon">📅</span>
+              {{ task.dueDate | date: "MMM d, yyyy" }}
+            </span>
+
+            <span
+              class="meta-item priority"
+              [class]="'priority-' + task.priority"
+            >
+              {{ getPriorityLabel(task.priority) }}
+            </span>
+          </div>
+
+          @if (task.aiSuggestion) {
+            <div class="ai-suggestion">
+              <span class="suggestion-icon">💡</span>
+              <span class="suggestion-text">{{ task.aiSuggestion }}</span>
+            </div>
+          }
+        </div>
+
+        <div class="task-actions">
+          <select
+            class="status-select"
+            [value]="task.status"
+            (change)="updateTaskStatus(task, $event)"
+            [attr.aria-label]="t('tasks.updateStatus', { title: task.title })"
+          >
+            <option [value]="TaskStatus.Pending">
+              {{ t("tasks.status.pending") }}
+            </option>
+            <option [value]="TaskStatus.InProgress">
+              {{ t("tasks.status.inProgress") }}
+            </option>
+            <option [value]="TaskStatus.Completed">
+              {{ t("tasks.status.completed") }}
+            </option>
+            <option [value]="TaskStatus.Cancelled">
+              {{ t("tasks.status.cancelled") }}
+            </option>
+          </select>
+
+          <button
+            class="action-btn delete"
+            (click)="deleteTask(task, $event)"
+            [title]="t('tasks.deleteTask')"
+          >
+            🗑️
+          </button>
+        </div>
+      </article>
+    } @empty {
+      <div class="empty-state">
+        <span class="empty-icon">✅</span>
+        <h3>{{ t("tasks.noTasks") }}</h3>
+        <p>
+          @if (selectedStatus() === "all") {
+            {{ t("tasks.noTasksMessage") }}
+          } @else {
+            {{ t("tasks.noStatusTasks", { status: selectedStatus() }) }}
+          }
+        </p>
+        <button class="btn btn-primary" (click)="openNewTaskModal()">
+          ➕ {{ t("tasks.createTask") }}
+        </button>
+      </div>
+    }
+  </section>
+
+  <!-- New/Edit Task Modal -->
+  @if (showTaskModal()) {
+    <div class="modal-overlay" (click)="closeTaskModal()">
+      <div class="modal-content" (click)="$event.stopPropagation()">
+        <header class="modal-header">
+          <h2>
+            {{ editingTask() ? t("tasks.editTask") : t("tasks.newTask") }}
+          </h2>
+          <button class="close-btn" (click)="closeTaskModal()">✕</button>
+        </header>
+
+        <form class="modal-body" (ngSubmit)="saveTask()">
+          <div class="form-group">
+            <label class="form-label" for="task-title"
+              >{{ t("tasks.form.title") }} *</label
+            >
+            <input
+              type="text"
+              id="task-title"
+              class="form-input"
+              [(ngModel)]="taskForm.title"
+              name="title"
+              required
+              [placeholder]="t('tasks.form.titlePlaceholder')"
+            />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="task-description">{{
+              t("tasks.form.description")
+            }}</label>
+            <textarea
+              id="task-description"
+              class="form-input form-textarea"
+              [(ngModel)]="taskForm.description"
+              name="description"
+              [placeholder]="t('tasks.form.descriptionPlaceholder')"
+              rows="3"
+            ></textarea>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="task-priority">{{
+                t("tasks.form.priority")
+              }}</label>
+              <select
+                id="task-priority"
+                class="form-input"
+                [(ngModel)]="taskForm.priority"
+                name="priority"
+              >
+                <option [value]="TaskPriority.Low">
+                  {{ t("tasks.priority.low") }}
+                </option>
+                <option [value]="TaskPriority.Medium">
+                  {{ t("tasks.priority.medium") }}
+                </option>
+                <option [value]="TaskPriority.High">
+                  {{ t("tasks.priority.high") }}
+                </option>
+                <option [value]="TaskPriority.Urgent">
+                  {{ t("tasks.priority.urgent") }}
+                </option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="task-due">{{
+                t("tasks.form.dueDate")
+              }}</label>
+              <input
+                type="date"
+                id="task-due"
+                class="form-input"
+                [(ngModel)]="taskForm.dueDate"
+                name="dueDate"
+              />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="task-client">{{
+              t("tasks.form.client")
+            }}</label>
+            <select
+              id="task-client"
+              class="form-input"
+              [(ngModel)]="taskForm.clientId"
+              name="clientId"
+            >
+              <option value="">{{ t("common.noClient") }}</option>
+              @for (client of clients(); track client.id) {
+                <option [value]="client.id">
+                  {{ client.firstName }} {{ client.lastName }}
+                </option>
+              }
+            </select>
+          </div>
+
+          <footer class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              (click)="closeTaskModal()"
+            >
+              {{ t("common.cancel") }}
+            </button>
+            <button type="submit" class="btn btn-primary">
+              {{ editingTask() ? t("common.update") : t("common.create") }}
+              {{ t("tasks.title") }}
+            </button>
+          </footer>
+        </form>
+      </div>
+    </div>
+  }
+
+  <!-- Task Detail Modal -->
+  @if (selectedTask()) {
+    <div class="modal-overlay" (click)="closeTaskDetail()">
+      <div class="modal-content" (click)="$event.stopPropagation()">
+        <header class="modal-header">
+          <h2>{{ t("tasks.taskDetails") }}</h2>
+          <button class="close-btn" (click)="closeTaskDetail()">✕</button>
+        </header>
+
+        <div class="modal-body">
+          <div class="detail-header">
+            <h3>{{ selectedTask()!.title }}</h3>
+            <span
+              class="badge"
+              [class]="'badge-' + getPriorityClass(selectedTask()!.priority)"
+            >
+              {{ getPriorityLabel(selectedTask()!.priority) }}
+            </span>
+          </div>
+
+          <p class="detail-description">{{ selectedTask()!.description }}</p>
+
+          <div class="detail-grid">
+            <div class="detail-item">
+              <span class="detail-label">{{ t("tasks.form.status") }}</span>
+              <span class="detail-value">{{
+                getStatusLabel(selectedTask()!.status)
+              }}</span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-label">{{ t("tasks.form.dueDate") }}</span>
+              <span
+                class="detail-value"
+                [class.overdue]="isOverdue(selectedTask()!)"
+              >
+                {{ selectedTask()!.dueDate | date: "MMMM d, yyyy" }}
+              </span>
+            </div>
+            @if (selectedTask()!.clientName) {
+              <div class="detail-item">
+                <span class="detail-label">{{ t("tasks.form.client") }}</span>
+                <span class="detail-value">{{
+                  selectedTask()!.clientName
+                }}</span>
+              </div>
+            }
+            <div class="detail-item">
+              <span class="detail-label">{{ t("tasks.form.created") }}</span>
+              <span class="detail-value">{{
+                selectedTask()!.createdAt | date: "MMM d, yyyy h:mm a"
+              }}</span>
+            </div>
+          </div>
+
+          @if (selectedTask()!.aiGenerated && selectedTask()!.aiSuggestion) {
+            <div class="ai-insight">
+              <h4>🤖 {{ t("tasks.aiSuggestion") }}</h4>
+              <p>{{ selectedTask()!.aiSuggestion }}</p>
+            </div>
+          }
+        </div>
+
+        <footer class="modal-footer">
+          <button class="btn btn-secondary" (click)="closeTaskDetail()">
+            {{ t("common.close") }}
+          </button>
+          <button class="btn btn-primary" (click)="editTask(selectedTask()!)">
+            ✏️ {{ t("common.edit") }}
+          </button>
+        </footer>
+      </div>
+    </div>
+  }
+</main>

@@ -1,0 +1,148 @@
+<main class="search-page">
+  <!-- Search Bar -->
+  <section class="search-section">
+    <div class="search-container">
+      <span class="search-icon">🔍</span>
+      <input
+        type="text"
+        class="search-input"
+        [(ngModel)]="searchQuery"
+        (input)="onSearch()"
+        [placeholder]="t('search.placeholder')"
+        autofocus
+      />
+      @if (searchQuery()) {
+        <button class="clear-btn" (click)="clearSearch()">✕</button>
+      }
+    </div>
+
+    <div class="search-filters">
+      @for (filter of filters; track filter.value) {
+        <button
+          class="filter-btn"
+          [class.active]="selectedFilter() === filter.value"
+          (click)="setFilter(filter.value)"
+        >
+          {{ filter.icon }} {{ t("search.filters." + filter.value) }}
+          @if (filter.value !== "all") {
+            <span class="filter-count">{{ getFilterCount(filter.value) }}</span>
+          }
+        </button>
+      }
+    </div>
+  </section>
+
+  <!-- Search Results -->
+  <section class="results-section">
+    @if (searchQuery()) {
+      <div class="results-header">
+        <h2>
+          {{ filteredResults().length }} {{ t("common.resultsFor") }} "{{
+            searchQuery()
+          }}"
+        </h2>
+      </div>
+
+      <div class="results-list">
+        @for (result of filteredResults(); track result.id) {
+          <article class="result-card" [class]="'type-' + result.type">
+            <div class="result-icon">
+              {{ getTypeIcon(result.type) }}
+            </div>
+            <div class="result-content">
+              <div class="result-type">
+                {{ t("search.filters." + result.type) }}
+              </div>
+              <h3 class="result-title">{{ result.title }}</h3>
+              <p class="result-subtitle">{{ result.subtitle }}</p>
+              <div class="result-meta">
+                @for (key of getMetaKeys(result.metadata); track key) {
+                  <span class="meta-item">
+                    <span class="meta-key">{{ key }}:</span>
+                    <span class="meta-value">{{ result.metadata[key] }}</span>
+                  </span>
+                }
+              </div>
+            </div>
+            <button class="view-btn" (click)="viewResult(result)">
+              {{ t("common.view") }} →
+            </button>
+          </article>
+        } @empty {
+          <div class="no-results">
+            <span class="no-results-icon">🔍</span>
+            <h3>{{ t("search.noResults") }}</h3>
+            <p>{{ t("search.noResultsMessage") }}</p>
+          </div>
+        }
+      </div>
+    } @else {
+      <!-- Recent & Quick Access -->
+      <div class="quick-access">
+        <h2>{{ getQuickAccessTitle() }}</h2>
+
+        <div class="access-grid">
+          @if (selectedFilter() === "all" || selectedFilter() === "task") {
+            <div class="access-section">
+              <h3>📋 {{ t("search.recentTasks") }}</h3>
+              <div class="access-list">
+                @for (task of recentTasks(); track task.id) {
+                  <div class="access-item">
+                    <span class="access-icon">📋</span>
+                    <span class="access-text">{{ task.title }}</span>
+                  </div>
+                }
+              </div>
+            </div>
+          }
+
+          @if (selectedFilter() === "all" || selectedFilter() === "alert") {
+            <div class="access-section">
+              <h3>🔔 {{ t("search.activeAlerts") }}</h3>
+              <div class="access-list">
+                @for (alert of recentAlerts(); track alert.id) {
+                  <div class="access-item">
+                    <span class="access-icon">🔔</span>
+                    <span class="access-text">{{ alert.title }}</span>
+                  </div>
+                }
+              </div>
+            </div>
+          }
+
+          @if (selectedFilter() === "all" || selectedFilter() === "client") {
+            <div class="access-section">
+              <h3>👥 {{ t("search.recentClients") }}</h3>
+              <div class="access-list">
+                @for (client of recentClients(); track client.id) {
+                  <div class="access-item">
+                    <span class="access-icon">👤</span>
+                    <span class="access-text"
+                      >{{ client.firstName }} {{ client.lastName }}</span
+                    >
+                  </div>
+                }
+              </div>
+            </div>
+          }
+
+          @if (selectedFilter() === "all" || selectedFilter() === "policy") {
+            <div class="access-section">
+              <h3>📄 {{ t("search.recentPolicies") }}</h3>
+              <div class="access-list">
+                @for (policy of recentPolicies(); track policy.id) {
+                  <div class="access-item">
+                    <span class="access-icon">📄</span>
+                    <span class="access-text"
+                      >{{ policy.policyNumber }} - {{ policy.clientName }}</span
+                    >
+                  </div>
+                }
+              </div>
+            </div>
+          }
+        </div>
+      </div>
+    }
+  </section>
+</main>

@@ -1,0 +1,131 @@
+<div class="app-container" [attr.dir]="isRtl() ? 'rtl' : 'ltr'">
+  <!-- Mobile Sidebar Overlay -->
+  <div
+    class="sidebar-overlay"
+    [class.active]="mobileMenuOpen()"
+    (click)="closeMobileMenu()"
+  ></div>
+
+  <!-- Sidebar Navigation -->
+  <aside
+    class="sidebar"
+    [class.collapsed]="sidebarCollapsed()"
+    [class.mobile-open]="mobileMenuOpen()"
+  >
+    <div class="sidebar-header">
+      <div class="logo">
+        <span class="logo-icon">🛡️</span>
+        @if (!sidebarCollapsed() || mobileMenuOpen()) {
+          <span class="logo-text">InsureAI</span>
+        }
+      </div>
+      <button
+        class="collapse-btn"
+        (click)="toggleSidebar()"
+        [attr.aria-label]="
+          sidebarCollapsed() ? t('app.expandSidebar') : t('app.collapseSidebar')
+        "
+      >
+        @if (isRtl()) {
+          {{ sidebarCollapsed() ? "←" : "→" }}
+        } @else {
+          {{ sidebarCollapsed() ? "→" : "←" }}
+        }
+      </button>
+    </div>
+
+    <nav
+      class="sidebar-nav"
+      role="navigation"
+      [attr.aria-label]="t('app.mainNavigation')"
+    >
+      @for (item of navItems(); track item.route) {
+        <a
+          [routerLink]="item.route"
+          routerLinkActive="active"
+          class="nav-item"
+          [attr.aria-label]="item.label"
+          [title]="item.label"
+          (click)="closeMobileMenu()"
+        >
+          <span class="nav-icon">{{ item.icon }}</span>
+          @if (!sidebarCollapsed() || mobileMenuOpen()) {
+            <span class="nav-label">{{ item.label }}</span>
+          }
+          @if (item.badge && item.badge > 0) {
+            <span
+              class="nav-badge"
+              [attr.aria-label]="t('app.itemCount', { count: item.badge })"
+            >
+              {{ item.badge > 99 ? "99+" : item.badge }}
+            </span>
+          }
+        </a>
+      }
+    </nav>
+
+    <div class="sidebar-footer">
+      @if (!sidebarCollapsed() || mobileMenuOpen()) {
+        <div class="user-info">
+          <span class="user-avatar">👤</span>
+          <div class="user-details">
+            <span class="user-name">{{ t("app.demoAgent") }}</span>
+            <span class="user-role">{{ t("app.insuranceAgent") }}</span>
+          </div>
+        </div>
+      }
+    </div>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="main-content">
+    <!-- Top Header -->
+    <header class="top-header">
+      <div class="header-left">
+        <button
+          class="mobile-menu-btn"
+          (click)="toggleMobileMenu()"
+          [attr.aria-label]="t('app.menu')"
+        >
+          ☰
+        </button>
+        <h1 class="page-title">{{ pageTitle() }}</h1>
+      </div>
+      <div class="header-right">
+        <div class="quick-stats">
+          <div class="stat-item">
+            <span class="stat-icon">🔔</span>
+            <span class="stat-value">{{ unreadAlerts() }}</span>
+            <span class="stat-label">{{ t("nav.alerts") }}</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-icon">📋</span>
+            <span class="stat-value">{{ pendingTasks() }}</span>
+            <span class="stat-label">{{ t("nav.tasks") }}</span>
+          </div>
+        </div>
+        <button
+          class="lang-btn"
+          (click)="toggleLanguage()"
+          [attr.aria-label]="t('app.language')"
+          [title]="t('app.language')"
+        >
+          {{ currentLocale() === "en" ? "🇺🇸" : "🇮🇱" }}
+          <span class="lang-code">{{ currentLocale().toUpperCase() }}</span>
+        </button>
+        <button
+          class="search-btn"
+          (click)="navigateToSearch()"
+          [attr.aria-label]="t('search.title')"
+        >
+          🔍
+        </button>
+      </div>
+    </header>
+
+    <!-- Page Content -->
+    <div class="page-content">
+      <router-outlet></router-outlet>
+    </div>
+  </main>
+</div>
