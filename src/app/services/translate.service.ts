@@ -69,11 +69,19 @@ export class TranslateService {
 
   /**
    * Get a translation by key using dot notation
+   * This method reads from a signal, so it's reactive in computed/effect contexts
    * @param key - Translation key (e.g., 'tasks.newTask')
    * @param params - Optional parameters for interpolation (e.g., { count: 5 })
    */
   get(key: string, params?: Record<string, string | number>): string {
+    // Reading _translations() makes this reactive
     const translations = this._translations();
+
+    // Also read isLoaded to ensure reactivity when translations load
+    if (!this._isLoaded()) {
+      return key; // Return key while loading
+    }
+
     const keys = key.split(".");
 
     let value: any = translations;

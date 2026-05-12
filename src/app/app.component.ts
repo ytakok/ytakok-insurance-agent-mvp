@@ -33,34 +33,43 @@ export class AppComponent {
   currentLocale = this.localeService.currentLocale;
   isRtl = this.localeService.isRtl;
 
+  // Track translation loading state for reactivity
+  translationsLoaded = this.translateService.isLoaded;
+
   unreadAlerts = computed(() => this.dataService.unreadAlerts().length);
   pendingTasks = computed(() => this.dataService.pendingTasks().length);
 
-  // Translation helper
+  // Translation helper - reads from signal so it's reactive
   t(key: string, params?: Record<string, string | number>): string {
     return this.translateService.get(key, params);
   }
 
-  navItems = computed<NavItem[]>(() => [
-    { label: this.t("nav.dashboard"), route: "/dashboard", icon: "📊" },
-    { label: this.t("nav.upload"), route: "/upload", icon: "📤" },
-    {
-      label: this.t("nav.alerts"),
-      route: "/alerts",
-      icon: "🔔",
-      badge: this.unreadAlerts(),
-    },
-    {
-      label: this.t("nav.tasks"),
-      route: "/tasks",
-      icon: "📋",
-      badge: this.pendingTasks(),
-    },
-    { label: this.t("nav.email"), route: "/email", icon: "✉️" },
-    { label: this.t("nav.search"), route: "/search", icon: "🔍" },
-    { label: this.t("nav.clients"), route: "/clients", icon: "👥" },
-    { label: this.t("nav.policies"), route: "/policies", icon: "📄" },
-  ]);
+  // navItems recomputes when translations change (due to translationsLoaded dependency)
+  navItems = computed<NavItem[]>(() => {
+    // This dependency ensures recomputation when translations load
+    const _ = this.translationsLoaded();
+
+    return [
+      { label: this.t("nav.dashboard"), route: "/dashboard", icon: "📊" },
+      { label: this.t("nav.upload"), route: "/upload", icon: "📤" },
+      {
+        label: this.t("nav.alerts"),
+        route: "/alerts",
+        icon: "🔔",
+        badge: this.unreadAlerts(),
+      },
+      {
+        label: this.t("nav.tasks"),
+        route: "/tasks",
+        icon: "📋",
+        badge: this.pendingTasks(),
+      },
+      { label: this.t("nav.email"), route: "/email", icon: "✉️" },
+      { label: this.t("nav.search"), route: "/search", icon: "🔍" },
+      { label: this.t("nav.clients"), route: "/clients", icon: "👥" },
+      { label: this.t("nav.policies"), route: "/policies", icon: "📄" },
+    ];
+  });
 
   constructor() {
     // Update page title on navigation
