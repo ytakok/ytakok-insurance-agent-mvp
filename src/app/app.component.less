@@ -303,38 +303,62 @@
   box-sizing: border-box;
 }
 
-// Mobile First - Hide sidebar by default on mobile
+// Mobile First - Sidebar always visible but collapsed on mobile
 @media (max-width: 639px) {
   .sidebar {
-    transform: translateX(-100%);
-    width: @sidebar-width;
-
-    &.collapsed {
-      transform: translateX(-100%);
-    }
-
-    &.mobile-open {
-      transform: translateX(0);
-    }
-
+    width: @sidebar-collapsed-width;
+    
+    // Always collapsed on mobile - hide text elements
     .logo-text,
     .nav-label,
     .user-details {
-      display: block;
+      display: none;
+    }
+
+    .collapse-btn {
+      display: none;
+    }
+
+    .nav-badge {
+      position: absolute;
+      top: 4px;
+      right: 4px;
+      padding: 2px 4px;
+      font-size: 9px;
+      min-width: 14px;
+    }
+
+    // When mobile menu is open, expand to full width
+    &.mobile-open {
+      width: @sidebar-width;
+      
+      .logo-text,
+      .nav-label,
+      .user-details {
+        display: block;
+      }
+
+      .nav-badge {
+        position: static;
+        padding: 2px 6px;
+        font-size: @font-size-xs;
+      }
     }
   }
 
   .app-container[dir="rtl"] .sidebar {
-    transform: translateX(100%);
-
-    &.mobile-open {
-      transform: translateX(0);
-    }
+    left: auto;
+    right: 0;
   }
 
   .main-content {
-    margin-left: 0 !important;
+    margin-left: @sidebar-collapsed-width !important;
     margin-right: 0 !important;
+  }
+
+  .app-container[dir="rtl"] .main-content {
+    margin-left: 0 !important;
+    margin-right: @sidebar-collapsed-width !important;
   }
 
   .top-header {
@@ -363,7 +387,11 @@
   }
 
   .sidebar-overlay {
-    display: block;
+    display: none;
+    
+    &.active {
+      display: block;
+    }
   }
 }
 
